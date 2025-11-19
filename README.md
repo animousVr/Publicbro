@@ -1,2 +1,363 @@
 # Publicbro
 U can also
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Be Mine?</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0, #fd79a8, #e84393);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .initial-view {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .celebration-view {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.5); /* 50% transparency behind text */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 10;
+        }
+        .glowing-text {
+            font-size: 3em;
+            color: #fff;
+            text-shadow: 0 0 10px #ff6b6b, 0 0 20px #ff6b6b, 0 0 30px #ff6b6b;
+            animation: glow 2s ease-in-out infinite alternate;
+            margin-bottom: 20px;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ff6b6b; }
+            to { text-shadow: 0 0 20px #ff6b6b, 0 0 30px #ff6b6b; }
+        }
+        .twinkling-stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+        .star {
+            position: absolute;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s infinite;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+        .inputs {
+            margin: 20px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input {
+            padding: 10px;
+            border: 2px solid #ff6b6b;
+            border-radius: 10px;
+            font-size: 1em;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.56); /* 56% transparency */
+        }
+        .buttons {
+            display: flex;
+            gap: 50px; /* Keeps buttons separate */
+            margin: 20px 0;
+        }
+        button {
+            font-size: 1.5em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        #yesBtn {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+        }
+        #yesBtn:hover {
+            transform: scale(1.1);
+        }
+        #noBtn {
+            background: linear-gradient(45deg, #a8e6cf, #dcedc8);
+            color: #333;
+            transition: all 0.5s ease;
+        }
+        .floating-hearts {
+            position: absolute;
+            font-size: 2em;
+            animation: float 3s infinite;
+            pointer-events: none;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 1; }
+            100% { transform: translateY(-100vh); opacity: 0; }
+        }
+        .rain-emoji {
+            position: absolute;
+            font-size: 2em;
+            animation: rain 3s linear infinite;
+            z-index: 5;
+        }
+        @keyframes rain {
+            0% { transform: translateY(-100vh); }
+            100% { transform: translateY(100vh); }
+        }
+        .spray-emoji {
+            position: absolute;
+            font-size: 2em;
+            animation: spray 2s ease-out forwards;
+            z-index: 5;
+        }
+        @keyframes spray {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+        }
+        .popup {
+            position: absolute;
+            font-size: 20em; /* Big size to cover half screen */
+            z-index: 20;
+            animation: popupShake 2s ease-in-out forwards;
+        }
+        @keyframes popupShake {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            25% { transform: translateY(50vh) scale(1.2); }
+            50% { transform: translateY(50vh) scale(1); }
+            75% { transform: translateY(50vh) scale(1.2); }
+            100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+        }
+        .zoom-heart {
+            position: absolute;
+            font-size: 20em;
+            z-index: 15;
+            animation: zoomOut 2s ease-out forwards;
+        }
+        @keyframes zoomOut {
+            0% { transform: scale(0); opacity: 1; }
+            100% { transform: scale(5); opacity: 0; }
+        }
+        .timer-box {
+            position: absolute;
+            bottom: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 1.2em;
+            color: green; /* Green color for timer box */
+            display: none;
+        }
+        .celebration {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .medium-text {
+            font-size: 2em;
+            color: #333;
+            font-weight: bold;
+        }
+        .big-text {
+            font-size: 4em;
+            color: #e91e63;
+            font-weight: bold;
+        }
+        .end-text {
+            font-size: 1cm; /* 1cm size as requested */
+            color: #007bff; /* Romantic blue */
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="twinkling-stars" id="stars"></div>
+    <div class="initial-view" id="initialView">
+        <div class="glowing-text">❤️‍🩹</div>
+        <div class="glowing-text">WILL U BE MINE ? 🥺</div>
+        <div class="inputs" id="inputs">
+            <input type="text" id="nameInput" placeholder="Enter your crush's name (optional)">
+            <input type="date" id="dateInput" placeholder="Enter start date (optional, e.g., 2024-02-02)">
+        </div>
+        <div class="buttons">
+            <button id="yesBtn">Yes! 😍</button>
+            <button id="noBtn">No 😢</button>
+        </div>
+    </div>
+    <div class="celebration-view" id="celebrationView">
+        <div class="celebration">
+            <div class="medium-text">You made me the happiest person on earth</div>
+            <div class="big-text">boyahh! 🎊⚘️</div>
+            <div class="end-text" id="endText">This is just the beginning of our beautiful journey ..❣️❣️</div>
+        </div>
+        <div class="timer-box" id="timerBox">since i love u: <span id="timer">0d 0h 0m 0s</span></div>
+    </div>
+
+    <audio id="romanticMusic" loop preload="auto">
+        <source src="https://www.soundjay.com/misc/sounds/romantic-piano-01.wav" type="audio/wav"> <!-- Placeholder for soft romantic sound; replace with a real Talwinder Singh song URL if available -->
+        Your browser does not support the audio element.
+    </audio>
+
+    <script>
+        // Twinkling stars
+        const starsContainer = document.getElementById('stars');
+        for (let i = 0; i < 50; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = star.style.height = Math.random() * 3 + 1 + 'px';
+            star.style.animationDelay = Math.random() * 2 + 's';
+            starsContainer.appendChild(star);
+        }
+
+        // Floating hearts
+        setInterval(() => {
+            const heart = document.createElement('div');
+            heart.className = 'floating-hearts';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            document.body.appendChild(heart);
+            setTimeout(() => document.body.removeChild(heart), 3000);
+        }, 1000);
+
+        // Inputs disappear after 5 seconds, but pause while user is typing
+        let hideTimeout;
+        function startHideTimer() {
+            hideTimeout = setTimeout(() => {
+                document.getElementById('inputs').style.display = 'none';
+            }, 5000);
+        }
+        startHideTimer();
+
+        const nameInput = document.getElementById('nameInput');
+        const dateInput = document.getElementById('dateInput');
+
+        [nameInput, dateInput].forEach(input => {
+            input.addEventListener('input', () => {
+                clearTimeout(hideTimeout); // Stop the timer while typing
+            });
+            input.addEventListener('blur', () => {
+                // Resume timer after user stops typing (1 second delay)
+                setTimeout(() => {
+                    if (!nameInput.value && !dateInput.value) {
+                        startHideTimer();
+                    } else {
+                        document.getElementById('inputs').style.display = 'none'; // Hide immediately if input given
+                    }
+                }, 1000);
+            });
+        });
+
+        // No button dodge and changes
+        const noBtn = document.getElementById('noBtn');
+        const messages = ["Think again 😏", "Give me a chance 😘", "Are you sure? 👀", "Don’t break my heart 💔", "You might regret", "U can't 😌"];
+        let messageIndex = 0;
+        noBtn.addEventListener('mouseenter', () => {
+            noBtn.style.transform = `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px)`;
+            noBtn.textContent = messages[messageIndex % messages.length];
+            messageIndex++;
+            noBtn.style.background = `hsl(${Math.random() * 360}, 70%, 80%)`;
+            noBtn.style.fontSize = Math.random() * 0.5 + 1.5 + 'em';
+            noBtn.style.borderRadius = Math.random() * 50 + 'px';
+        });
+
+        // Yes button click - change page
+        document.getElementById('yesBtn').addEventListener('click', function() {
+            const name = document.getElementById('nameInput').value || 'Aashiqa';
+            const dateValue = document.getElementById('dateInput').value;
+            const startDate = dateValue ? new Date(dateValue + 'T00:00:00') : new Date('2024-02-02T00:00:00');
+            
+            document.getElementById('endText').textContent = `${name} This is just the beginning of our beautiful journey ..❣️❣️`;
+            document.getElementById('inputs').style.display = 'none'; // Hide inputs immediately
+            
+            document.getElementById('initialView').style.display = 'none';
+            document.getElementById('celebrationView').style.display = 'flex';
+            document.getElementById('timerBox').style.display = 'block';
+            
+            // Play music
+            document.getElementById('romanticMusic').play();
+            
+            // Popup 🥳 from below, shake for 2 sec, then disappear
+            const popup = document.createElement('div');
+            popup.className = 'popup';
+            popup.textContent = '🥳';
+            popup.style.left = '50%';
+            popup.style.transform = 'translateX(-50%)';
+            document.body.appendChild(popup);
+            setTimeout(() => {
+                document.body.removeChild(popup);
+                // Zoom out 💖 to the screen
+                const zoomHeart = document.createElement('div');
+                zoomHeart.className = 'zoom-heart';
+                zoomHeart.textContent = '💖';
+                zoomHeart.style.left = '50%';
+                zoomHeart.style.top = '50%';
+                zoomHeart.style.transform = 'translate(-50%, -50%)';
+                document.body.appendChild(zoomHeart);
+                setTimeout(() => document.body.removeChild(zoomHeart), 2000);
+            }, 2000);
+            
+            // Spray emojis for 2 seconds
+            const sprayEmojis = ['🌷', '⚘️', '🪻', '🎉', '🎊'];
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'spray-emoji';
+                    emoji.textContent = sprayEmojis[Math.floor(Math.random() * sprayEmojis.length)];
+                    emoji.style.left = Math.random() * 100 + '%';
+                    document.body.appendChild(emoji);
+                    setTimeout(() => document.body.removeChild(emoji), 2000);
+                }, i * 100);
+            }
+            
+            // Rain emojis for 3 minutes
+            const emojis = ['❤️', '🌸', '😍', '🥰'];
+            let rainInterval = setInterval(() => {
+                for (let i = 0; i < 5; i++) {
+                    const emoji = document.createElement('div');
+                    emoji.className = 'rain-emoji';
+                    emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                    emoji.style.left = Math.random() * 100 + '%';
+                    emoji.style.animationDuration = Math.random() * 2 + 2 + 's';
+                    document.body.appendChild(emoji);
+                    setTimeout(() => document.body.removeChild(emoji), 3000);
+                }
+            }, 200);
+            setTimeout(() => clearInterval(rainInterval), 180000); // 3 minutes
+            
+            // Timer since start date
+            setInterval(() => {
+                const now = new Date();
+                const diff = now - startDate;
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                document.getElementById('timer').textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
